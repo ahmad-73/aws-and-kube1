@@ -85,7 +85,7 @@ const IPv4Addr = (props) => {
             <span>{ipv4.firstUsableAddress(3)}</span>
             <br />
             <span>
-              AWS reserves first four addresses for: Network, Router, DNS,
+              AWS cloud reserves first four addresses for: Network, Router, DNS,
               Future use
             </span>
           </div>
