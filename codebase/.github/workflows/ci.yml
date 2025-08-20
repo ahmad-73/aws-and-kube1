@@ -1,0 +1,63 @@
+name: CI pipeline
+
+on:
+    pull_request:
+      branches: [ main, master ]
+    push:
+      branches: [ main, master ]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: rdicidr-0.1.0/package-lock.json
+        
+    - name: Change to application directory
+      run: cd rdicidr-0.1.0
+      
+    - name: Install dependencies
+      run: npm install
+      
+    - name: Run linter (ESLint)
+      run: npm run lint
+      
+    - name: Run formatter (Prettier)
+      run: npm run prettier
+      
+    - name: Run tests (Jest)
+      run: CI=true npm run test -- --watchAll=false --coverage
+      
+    - name: Build application
+      run: npm run build
+      
+    - name: Build Docker image
+      run: |
+        cd rdicidr-0.1.0
+        docker build -t rdicidr:${{ github.sha }} .
+        
+    - name: Login to DockerHub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.ubaidawan }}
+        password: ${{ secrets.dckr_pat_peR-NzFwZSNuwbm5tIWNk77Xr94 }}
+        
+    - name: Push Docker image to DockerHub
+      run: |
+        cd rdicidr-0.1.0
+        docker tag rdicidr:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/rdicidr:${{ github.sha }}
+        docker tag rdicidr:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/rdicidr:latest
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/rdicidr:${{ github.sha }}
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/rdicidr:latest
