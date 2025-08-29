@@ -1,10 +1,10 @@
 name: CI pipeline
 
 on:
-  pull_request:
-    branches: [main]
-  push:
-    branches: [main]
+    pull_request:
+      branches: [main]
+    push:
+      branches: [main]
 
 jobs:
   ci:
@@ -59,4 +59,6 @@ jobs:
         working-directory: codebase/rdicidr-0.1.0
         run: |
           docker tag rdicidr-0.1.0 ${{ secrets.DOCKER_USERNAME }}/rdicidr-0.1.0:latest
-          docker push ${{ secrets.DOCKER_USERNAME }}/rdicidr-0.1.0:latest
+          docker tag rdicidr-0.1.0 ${{ secrets.DOCKER_USERNAME }}/rdicidr-0.1.0:${{ github.sha }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/rdicidr-0.1.0:latest'
+          docker push ${{ secrets.DOCKER_USERNAME }}/rdicidr-0.1.0:${{ github.sha }}
