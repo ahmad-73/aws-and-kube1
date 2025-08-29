@@ -20,4 +20,4 @@ COPY nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 80
 
-ENRTYPOINT ["nginx", "-g", "daemon off;"]
+ENRTYPOINT ["nginx", "-g", "daemon off"]
