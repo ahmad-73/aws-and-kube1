@@ -1,4 +1,3 @@
-#Dockerfile for rdicidr-0.1.0
 FROM node:15-apline AS builder
 
 WORKDIR /app
@@ -21,4 +20,4 @@ COPY nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 80
 
-ENRTYPOINT ["nginx", "-g", "daemon off"]
+ENRTYPOINT ["nginx", "-g", "daemon off;"]
