@@ -1,15 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: rdicidr-service
-  namespace: production
+  name: ingress-wildcard-host
 spec:
-  type: ClusterIP
   ports:
   - port: 8080
-    targetPort: 80
-    protocol: TCP
-    name: http
+    name: web
+  clusterIP: None
   selector:
-    app: rdicidr
+    app: app-name
 ---
+apiVersion: apps/v1
+kind: StatefulSet
+## TODO: Complete the rest
