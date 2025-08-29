@@ -30,7 +30,7 @@ jobs:
         run: npm install --ignore-engines
 
       - name: Run linter (ESLint)
-        working-directory: codebase/rdicird-0.1.0
+        working-directory: codebase/rdicidr-0.1.0
         run: npm run lint
 
       - name: Run formatter (Prettier)
