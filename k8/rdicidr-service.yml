@@ -1,15 +1,13 @@
+# rdicidr-service.yml
 apiVersion: v1
 kind: Service
 metadata:
   name: rdicidr-service
   namespace: production
 spec:
-  type: ClusterIP
-  ports:
-  - port: 8080
-    targetPort: 80
-    protocol: TCP
-    name: http
+  clusterIP: None  # for StatefulSet headless service
   selector:
     app: rdicidr
----
+  ports:
+    - port: 80
+      targetPort: 80
