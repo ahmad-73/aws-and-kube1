@@ -1,4 +1,5 @@
 name: CI pipeline
+
 on:
     pull_request:
       branches: [main]
@@ -8,19 +9,19 @@ on:
 jobs:
   ci:
     runs-on: ubuntu-latest
-
+    
     strategy:
       matrix:
         node-version: [15.x]
-
+        
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Set Node.js ${{ matrix.node-version}}
+        
+      - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version}}
+          node-version: ${{ matrix.node-version }}
           cache: 'npm'
           cache-dependency-path: codebase/rdicidr-0.1.0/package-lock.json
 
@@ -28,19 +29,19 @@ jobs:
         working-directory: codebase/rdicidr-0.1.0
         run: npm install --ignore-engines
 
-      - name: Run linter (ESLint)
+      - name: Run linter(ESLint)
         working-directory: codebase/rdicidr-0.1.0
         run: npm run lint
 
-      - name: Run formatter (Prettier)
+      - name: Run prettier
         working-directory: codebase/rdicidr-0.1.0
         run: npm run prettier
 
-      - name: Run tests (Jest)
+      - name: Run tests
         working-directory: codebase/rdicidr-0.1.0
-        run:  CI=true npm run test -- --watchAll=false --coverage
+        run: CI=true npm run test -- --watchAll=false --coverage
 
-      - name: Build application
+      - name: Build the application
         working-directory: codebase/rdicidr-0.1.0
         run: npm run build
 
@@ -55,10 +56,9 @@ jobs:
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
       - name: Push Docker image to DockerHub
-        working-directory: codebase/rdicidr-0.1.0
+        working-directory: codebase/rdicidr-0.1.
         run: |
           docker tag rdicidr:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/rdicidr:${{ github.sha }}
           docker tag rdicidr:${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/rdicidr:latest
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/rdicidr:${{ github.sha }}
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/rdicidr:latest
-    

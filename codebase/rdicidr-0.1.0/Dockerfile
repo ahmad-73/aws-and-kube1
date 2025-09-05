@@ -1,10 +1,10 @@
-FROM node:15-alpine AS builder
+FROM node-15-alpine as builder
 
 WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm install --only=production --ignore-engines
+Run npm install --only=production --ignore-engines
 
 COPY . .
 
