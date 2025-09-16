@@ -60,5 +60,5 @@ jobs:
         run: |
           docker tag rdicidr-0.1.0 ${{ secrets.DOCKER_USERNAME }}/rdicidr-0.1.0:latest
           docker tag rdicidr-0.1.0 ${{ secrets.DOCKER_USERNAME }}/rdicidr-0.1.0:${{ github.sha }}
-          docker push ${{ secrets.DOCKER_USERNAME }}/rdicidr-0.1.0:latest'
+          docker push ${{ secrets.DOCKER_USERNAME }}/rdicidr-0.1.0:latest
           docker push ${{ secrets.DOCKER_USERNAME }}/rdicidr-0.1.0:${{ github.sha }}
