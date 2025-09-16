@@ -1,23 +1,29 @@
-FROM node:15-apline AS builder
+# Build stage
+FROM node:15-alpine AS builder
 
 WORKDIR /app
 
+# Copy package files and install all dependencies
 COPY package*.json ./
+RUN npm install --ignore-engines
 
-RUN npm install --only=production --ignore-engines
-
+# Copy the rest of the application source
 COPY . .
 
+# Build the React application
 RUN npm run build
 
+# Production stage
 FROM nginx:alpine
 
-WORKDIR /usr/share/nginx/html
+# Copy the built application from the builder stage
+COPY --from=builder /app/build /usr/share/nginx/html
 
-COPY --from=builder /app/build .
-
+# Copy the custom nginx configuration
 COPY nginx.conf /etc/nginx/nginx.conf
 
+# Expose port 80
 EXPOSE 80
 
-ENRTYPOINT ["nginx", "-g", "daemon off;"]
+# Start Nginx
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
